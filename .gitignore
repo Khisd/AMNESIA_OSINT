@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.env
+*.zip
+# Izinkan semua file di DATABASE VAULT (sudah dipilih yang aman)

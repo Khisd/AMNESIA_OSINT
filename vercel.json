@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" }
+  ],
+  "functions": {
+    "api/lookup.py": {
+      "includeFiles": "DATABASE VAULT/npwp-10k-sample.csv, DATABASE VAULT/kpu.csv, DATABASE VAULT/siak_clean_sample_1k.csv, DATABASE VAULT/siak_full_sample_1k.csv, DATABASE VAULT/ALL_EMPLOYEERS_BSI.csv, DATABASE VAULT/KEMENDAGRI BY DIVACCX.txt, DATABASE VAULT/Dukcapil .txt"
+    }
+  }
+}
