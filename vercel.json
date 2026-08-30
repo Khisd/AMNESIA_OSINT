@@ -5,7 +5,7 @@
   ],
   "functions": {
     "api/lookup.py": {
-      "includeFiles": "DATABASE VAULT/npwp-10k-sample.csv, DATABASE VAULT/kpu.csv, DATABASE VAULT/siak_clean_sample_1k.csv, DATABASE VAULT/siak_full_sample_1k.csv, DATABASE VAULT/ALL_EMPLOYEERS_BSI.csv, DATABASE VAULT/KEMENDAGRI BY DIVACCX.txt, DATABASE VAULT/Dukcapil .txt, DATABASE VAULT/personel1.json, DATABASE VAULT/myindihome_sample.csv, DATABASE VAULT/poldajateng1.xlsx, DATABASE VAULT/DATA_RAHASIA_MILITER_TNI_ANGKATAN_DARAT_DISINFOLAHTA_INDONESIA.xlsx, DATABASE VAULT/cctvapi.txt"
+      "includeFiles": "DATABASE VAULT/npwp-10k-sample.csv, DATABASE VAULT/kpu.csv, DATABASE VAULT/siak_clean_sample_1k.csv, DATABASE VAULT/siak_full_sample_1k.csv, DATABASE VAULT/ALL_EMPLOYEERS_BSI.csv, DATABASE VAULT/KEMENDAGRI BY DIVACCX.txt, DATABASE VAULT/Dukcapil .txt, DATABASE VAULT/personel1.json, DATABASE VAULT/myindihome_sample.csv, DATABASE VAULT/poldajateng1.xlsx, DATABASE VAULT/DATA_RAHASIA_MILITER_TNI_ANGKATAN_DARAT_DISINFOLAHTA_INDONESIA.xlsx, DATABASE VAULT/cctvapi.txt, DATABASE VAULT/doctors_perdosni.json"
     }
   }
 }

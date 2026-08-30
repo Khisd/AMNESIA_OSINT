@@ -31,6 +31,8 @@ VAULT_MAP = {
     "polda":     VAULT / "poldajateng1.xlsx",
     "militer":   VAULT / "DATA_RAHASIA_MILITER_TNI_ANGKATAN_DARAT_DISINFOLAHTA_INDONESIA.xlsx",
     "cctv":      VAULT / "cctvapi.txt",
+    "dokter":    VAULT / "doctors_perdosni.json",
+    "perdosni":  VAULT / "doctors_perdosni.json",
 }
 
 class handler(BaseHTTPRequestHandler):
