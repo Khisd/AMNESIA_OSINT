@@ -4,7 +4,10 @@ from urllib.parse import urlparse, parse_qs
 from pathlib import Path
 
 # Naikkan CSV field size limit (default 131072 terlalu kecil untuk indihome)
-csv.field_size_limit(10 * 1024 * 1024)  # 10MB
+try:
+    csv.field_size_limit(sys.maxsize)
+except OverflowError:
+    csv.field_size_limit(10 * 1024 * 1024)  # fallback 10MB
 
 # DATABASE-AMNESIA Vercel API
 # Contoh:
@@ -31,8 +34,8 @@ VAULT_MAP = {
     "dukcapil":  VAULT / "Dukcapil .txt",
     "personel":  VAULT / "personel1.json",
     "indihome":  VAULT / "myindihome_sample.csv",
-    "polda":     VAULT / "poldajateng1.xlsx",   # unavailable: xlsx corrupt
-    "militer":   VAULT / "DATA_RAHASIA_MILITER_TNI_ANGKATAN_DARAT_DISINFOLAHTA_INDONESIA.xlsx",  # unavailable: xlsx corrupt
+    "polda":     VAULT / "poldajateng1.csv",
+    "militer":   VAULT / "militer.csv",
     "cctv":      VAULT / "cctvapi.txt",
     "dokter":    VAULT / "doctors_perdosni.json",
     "perdosni":  VAULT / "doctors_perdosni.json",
