@@ -1,7 +1,10 @@
 from http.server import BaseHTTPRequestHandler
-import json, os, csv
+import json, os, csv, sys
 from urllib.parse import urlparse, parse_qs
 from pathlib import Path
+
+# Naikkan CSV field size limit (default 131072 terlalu kecil untuk indihome)
+csv.field_size_limit(10 * 1024 * 1024)  # 10MB
 
 # DATABASE-AMNESIA Vercel API
 # Contoh:
@@ -28,8 +31,8 @@ VAULT_MAP = {
     "dukcapil":  VAULT / "Dukcapil .txt",
     "personel":  VAULT / "personel1.json",
     "indihome":  VAULT / "myindihome_sample.csv",
-    "polda":     VAULT / "poldajateng1.xlsx",
-    "militer":   VAULT / "DATA_RAHASIA_MILITER_TNI_ANGKATAN_DARAT_DISINFOLAHTA_INDONESIA.xlsx",
+    "polda":     VAULT / "poldajateng1.xlsx",   # unavailable: xlsx corrupt
+    "militer":   VAULT / "DATA_RAHASIA_MILITER_TNI_ANGKATAN_DARAT_DISINFOLAHTA_INDONESIA.xlsx",  # unavailable: xlsx corrupt
     "cctv":      VAULT / "cctvapi.txt",
     "dokter":    VAULT / "doctors_perdosni.json",
     "perdosni":  VAULT / "doctors_perdosni.json",
@@ -101,9 +104,11 @@ class handler(BaseHTTPRequestHandler):
 
             # --- CSV ---
             if suffix == ".csv":
+                import csv as csv_mod
+                csv_mod.field_size_limit(10 * 1024 * 1024)  # 10MB field limit
                 all_matched = []
                 with open(vault_file, "r", encoding="utf-8", errors="ignore") as f:
-                    reader = csv.DictReader(f)
+                    reader = csv_mod.DictReader(f)
                     for row in reader:
                         row = {k: (v or "").strip() for k, v in row.items()}
                         if nik:
@@ -129,36 +134,10 @@ class handler(BaseHTTPRequestHandler):
                             "dataset": dataset, "file": vault_file.name, "data": data})
                 return
 
-            # --- XLSX ---
+            # --- XLSX (unavailable on Vercel - no openpyxl) ---
             if suffix == ".xlsx":
-                try:
-                    import openpyxl
-                    wb = openpyxl.load_workbook(str(vault_file), read_only=True, data_only=True)
-                    ws = wb.active
-                    headers = None
-                    all_matched = []
-                    for row in ws.iter_rows(values_only=True):
-                        if headers is None:
-                            headers = [str(c) if c else "" for c in row]
-                            continue
-                        row_vals = [str(c) if c is not None else "" for c in row]
-                        row_str = " ".join(row_vals).lower()
-                        if keyword and keyword in row_str:
-                            all_matched.append(dict(zip(headers, row_vals)))
-                    total = len(all_matched)
-                    if total == 0:
-                        self._json({"total": 0, "keyword": keyword, "dataset": dataset,
-                                    "data": [], "error": "Data tidak ditemukan"}, 404)
-                        return
-                    start = (page - 1) * limit if limit else 0
-                    data = all_matched[start:start + limit] if limit else all_matched
-                    self._json({"total": total, "page": page, "limit": limit,
-                                "keyword": keyword, "dataset": dataset,
-                                "file": vault_file.name, "data": data})
-                    return
-                except Exception as e:
-                    self._json({"error": f"xlsx error: {e}"}, 500)
-                    return
+                self._json({"error": f"dataset '{dataset}' tidak tersedia di Vercel (format xlsx). Gunakan dataset lain.", "datasets": [k for k, v in VAULT_MAP.items() if v.suffix != '.xlsx']}, 503)
+                return
 
             # --- JSON (personel1.json) ---
             if suffix == ".json":
