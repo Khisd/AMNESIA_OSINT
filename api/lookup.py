@@ -97,6 +97,52 @@ class handler(BaseHTTPRequestHandler):
             return
 
         vault_file = VAULT_MAP[dataset]
+        # --- CHUNKED PERSONEL (<40MB split) ---
+        if dataset in ["personel", "personil", "personel1"]:
+            part_files = sorted(VAULT.glob("personel1_part_*.json"))
+            if part_files:
+                try:
+                    all_matched = []
+                    for pf in part_files:
+                        with open(pf, "r", encoding="utf-8", errors="ignore") as f:
+                            text = f.read()
+                        dec = json.JSONDecoder()
+                        idx = 0
+                        n = len(text)
+                        while idx < n and (not limit or len(all_matched) < 500):
+                            while idx < n and text[idx].isspace(): idx += 1
+                            if idx >= n: break
+                            if text[idx] not in "[{": idx += 1; continue
+                            try:
+                                obj, end = dec.raw_decode(text, idx)
+                                idx = end
+                                if isinstance(obj, list):
+                                    for item in obj:
+                                        if limit and len(all_matched) >= 500: break
+                                        item_str = json.dumps(item, ensure_ascii=False).lower()
+                                        if nik and isinstance(item, dict) and str(item.get("NIK","")) == nik:
+                                            all_matched.append(item)
+                                        elif keyword and keyword in item_str:
+                                            all_matched.append(item)
+                                    break
+                                elif isinstance(obj, dict):
+                                    if (nik and obj.get("NIK")==nik) or (keyword and keyword in json.dumps(obj, ensure_ascii=False).lower()):
+                                        all_matched.append(obj)
+                                while idx < n and text[idx] in ", \n\r\t]":
+                                    if text[idx] == "]": break
+                                    idx += 1
+                            except: idx += 1
+                    total = len(all_matched)
+                    if total == 0:
+                        self._json({"total": 0, "keyword": keyword or nik, "dataset": dataset, "data": [], "error": "Data tidak ditemukan"}, 404)
+                        return
+                    start = (page - 1) * limit if limit else 0
+                    data = all_matched[start:start+limit] if limit else all_matched
+                    self._json({"total": total, "page": page, "limit": limit, "keyword": keyword or nik, "dataset": dataset, "file": f"{len(part_files)} chunks", "data": data})
+                    return
+                except Exception as e:
+                    self._json({"error": f"personel chunk fail: {e}"}, 500)
+                    return
         if not vault_file.exists():
             self._json({"total": 0, "dataset": dataset, "data": [],
                         "note": f"{vault_file.name} not in bundle"}, 404)
