@@ -19,7 +19,7 @@ class handler(BaseHTTPRequestHandler):
             "status": "READY ONLINE TERHUBUNG" if vault_ok else "DEGRADED",
             "vercel": "online",
             "github": "Khisd/DATABASE-AMNESIA",
-            "email": "khisd@amnesia.dev",
+            "email": "hafidzpanji00@gmail.com",
             "vault_ok": vault_ok,
             "vault_total_mb": round(total_mb,2),
             "datasets": len(CHECK_CHECKS) if False else 14,
@@ -34,7 +34,7 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
     def do_OPTIONS(self):
-        self.send_response(200)
+        self.send_response(200) 
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "x-api-key, content-type")
