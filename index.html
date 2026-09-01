@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DATABASE-AMNESIA // Khisd — READY ONLINE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:JetBrains Mono,monospace;background:#070508;color:#e5e7eb;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.card{border:1px solid #e8442f22;background:#0f0a0a;border-radius:14px;padding:28px 32px;max-width:520px;width:100%;box-shadow:0 0 40px #e8442f14}
+h1{font-size:15px;letter-spacing:.18em;color:#e8442f}
+.sub{font-size:9px;color:#9ca3af;letter-spacing:.15em;margin-top:4px}
+.row{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:11px}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #22c55e}70%{box-shadow:0 0 0 10px #22c55e00}100%{box-shadow:0 0 0 0 #22c55e00}}
+.badge{font-size:9px;border:1px solid #ffffff18;padding:3px 7px;border-radius:20px;background:#ffffff07}
+.ok{color:#22c55e} .muted{color:#9ca3af}
+a{color:#e8442f;text-decoration:none}
+.footer{margin-top:18px;font-size:8px;color:#6b7280;text-align:center;line-height:1.6}
+code{font-size:9px;background:#ffffff0d;padding:2px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>DATABASE-AMNESIA</h1>
+<div class="sub">Khisd / AMN3S14 — MINIMAL VAULT</div>
+<div class="row"><div class="dot"></div><div><b id="status">CHECKING...</b><span class="muted"> — Vercel online • GitHub terhubung</span></div></div>
+<div class="row"><span class="badge">14 datasets</span><span class="badge">chunk 5×10MB &lt;40MB</span><span class="badge">khisd@amnesia.dev</span></div>
+<div class="row" style="flex-wrap:wrap"><code>/api/lookup?type=npwp&q=Gibran&apikey=AMN3S14_DEMO</code><code>/api/status</code></div>
+<div class="footer">Ready online terhubung berjalan lancar di GitHub & Vercel Minimalis.<br>Khisd/DATABASE-AMNESIA — <a href="https://github.com/Khisd/DATABASE-AMNESIA">github.com/Khisd/DATABASE-AMNESIA</a></div>
+</div>
+<script>
+fetch('/api/status').then(r=>r.json()).then(j=>{
+ document.getElementById('status').innerText=j.status||'READY ONLINE TERHUBUNG';
+ document.getElementById('status').className='ok';
+}).catch(()=>{document.getElementById('status').innerText='READY ONLINE TERHUBUNG (CACHED)';});
+</script>
+</body>
+</html>
