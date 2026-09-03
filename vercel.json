@@ -9,9 +9,6 @@
     },
     "api/status.py": {
       "includeFiles": "DATABASE VAULT/personel1_part_001.json"
-    },
-    "api/index.py": {
-      "includeFiles": "DATABASE VAULT/personel1_part_001.json"
     }
   }
 }
